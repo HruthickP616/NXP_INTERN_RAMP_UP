@@ -14,5 +14,5 @@ Create a 1-D array of this structure of index 2. And then print the values of da
         Components: essential_core (binary value), core number (8 bit hexadecimal number)
     Command Id 3: Suspend Application 
           Components: application id (16 bit number), application type (4 bit number), priority (8 bit value)
-    At a given time only one command can be executed and values of rest command components must be NULL.
+    At a given time only one command can be executed.
     Also for each command it is necessary to fill all details.
