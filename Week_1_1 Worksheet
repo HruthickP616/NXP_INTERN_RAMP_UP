@@ -3,9 +3,109 @@ Python Questions:
   Populate strings and integers randomly in different lines, but make sure each type of line consist of minimum 45% of the file . Lngth of each line should be between 15-20 characters
   Create another file (file 2). In file 2 read data from file 1; Convert integers to hex numbers in 0x format (i.e. 0x1A,0x10 etc); 
   Reverse the strings (i.e. ABC is a boy. -> yob a si CBA. ). 
+import random
+import string
+
+def random_string(len):
+    return ''.join(random.choice(string.ascii_letters+ string.digits+ ' ') for _ in range(len))
+def write_file1 ():
+    try:
+        fhand=open("file1.txt","w")
+    except FileNotFoundError as e:
+        print(e)
+    scount=0
+    icount=0
+    for _ in range(5000):
+        llen=random.randint(15,20)
+        y=random.randint(0,250)
+        if icount==scount:
+            if random.choice([True,False]):
+                x=random_string(llen)
+                scount+=1
+            else:
+                x=random.randint(0,10000000)
+                icount+=1
+        if icount>(scount+y):
+            x=random_string(llen)
+            scount+=1
+        else:
+            x=random.randint(0,10000000)
+            icount+=1
+        fhand.write(str(x) + '\n')
+    fhand.close()
+
+def write_file2():
+    try:
+        fhand1=open("file1.txt","r")
+        fhand2=open("file2.txt","w")
+    except FileNotFoundError as e:
+        print(e)
+    for line in fhand1:
+        line=line.strip()
+        
+        if line.isdigit():
+            y=hex(int(line))
+        else:
+            y=line[::-1]
+        fhand2.write(str(y) + '\n')
+    fhand1.close()
+    fhand2.close()
+write_file1()
+write_file2()
+
+
+
+
+    
+
+
 
   2. Create a program which takes 2 directory paths as input (via CMD). Copy the contents of directory 1 to directory 2. 
   Also, change the name of all files/folders by adding preffix 'Copy_' and suffix  "__2". Eg: if a file is ABC.txt then copied file should be named Copy_ABC_2.txt 
+import os 
+import shutil
+def create_dir(pardir, dirname):
+    path=os.path.join(pardir,dirname)
+    os.mkdir(path)
+    mode = 0o666
+def create_file(f_path):
+    try:
+        with open(f_path,'w'):
+            pass
+    except IOError as e:
+        print(e)
+def copy_files(from_dir,to_dir):
+    try:
+        for files in os.listdir(from_dir):
+            source_f=os.path.join(from_dir,files)
+            dest_f= os.path.join(to_dir,files)
+            if os.path.isdir(source_f):
+                shutil.copytree(source_f, dest_f)
+            else:
+                shutil.copy2(source_f, dest_f)
+    except Exception as e:
+        print(e)
+def rename(dir_name,prefix,sufix):
+    try:
+        for files in os.listdir(dir_name):
+            s_f=os.path.join(dir_name,files)
+            files=prefix+files+sufix
+            d_f= os.path.join(dir_name,files)
+            os.rename(s_f,d_f)
+    except Exception as e:
+        print(e)
+
+create_dir(r"C:\Users\nxg04802\.vscode\qw1_1_1","dir1")
+create_dir(r"C:\Users\nxg04802\.vscode\qw1_1_1","dir2")
+create_file(r"C:\Users\nxg04802\.vscode\qw1_1_1\dir1\ABC.txt")
+create_file(r"C:\Users\nxg04802\.vscode\qw1_1_1\dir1\XYZ.txt")
+copy_files(r"C:\Users\nxg04802\.vscode\qw1_1_1\dir1",r"C:\Users\nxg04802\.vscode\qw1_1_1\dir2")
+rename(r"C:\Users\nxg04802\.vscode\qw1_1_1\dir2","copy_","__2")
+
+
+
+
+    
 
 C Questions:
   1. Make a user defined structure, which has 4 data fields as follows:
@@ -17,3 +117,30 @@ C Questions:
   Create the Object of this structure. The Object should be created via pointers
   Initialise data values of structure using this object
   and print those data values of structure using same object. Integer values should be printed in HEX format
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+struct var_store{
+    int a; //int occupies 4 bytes
+    unsigned short int b; // stores less than value of 65536
+    char c[10];
+    unsigned char d;
+    
+};
+
+int main()
+{
+    struct var_store *s1=(struct var_store*)malloc(sizeof(struct var_store));
+    struct var_store *s2=(struct var_store*)malloc(sizeof(struct var_store));
+    s1->a=10;
+    s2->a=20;
+    s1->b=656;
+    strcpy(s2->c,"Hruthick");
+    s1->d=0b11010;
+    
+    printf("s1->a:%x,\n s2->a:%x,\ns1->b:%hu,\n s2->c:%s,\ns1->u:%d\n",s1->a,s2->a,s1->b,s2->c,s1->d);
+    free(s1);
+    free(s2);
+    return 0;
+}
